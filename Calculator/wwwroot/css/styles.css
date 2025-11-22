@@ -4,8 +4,6 @@ body, main, article {
     height: 100vh;
     width: 100%;
     display: flex;
-    
-    
     background-color: #17161c;
 }
 
@@ -18,7 +16,6 @@ body, main, article {
     width: 100%;
 }
 
-
 .content-container {
     display: flex;
     flex-direction: column;
@@ -27,7 +24,6 @@ body, main, article {
     width: 100%;
     height: 100vh;
 }
-
 
 .calculator-frame {
     display: flex;
@@ -38,6 +34,34 @@ body, main, article {
     background-color: #536465;
 }
 
+.display-frame {
+    min-height: 120px;
+    border: solid black 1px;
+    margin-bottom: 20px;
+}
+
+.keypad-frame {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 10px;
+}
+
+button {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.btn {
+    cursor: pointer;
+    /*height: 40px;*/
+    /*width: 40px;*/
+    /*margin: 5px;*/
+    border-radius: 8px;
+}
+
 .calculator-content-container {
     display: flex;
     flex-direction: column;
@@ -46,5 +70,5 @@ body, main, article {
     margin: 15px;
     border-radius: 8px;
     
-    background-color: #a8a878;
+    background-color: #667266;
 }

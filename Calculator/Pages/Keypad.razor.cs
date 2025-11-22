@@ -4,4 +4,7 @@ namespace Calculator.Pages;
 
 public partial class Keypad : ComponentBase
 {
+
+    
+    
 }
