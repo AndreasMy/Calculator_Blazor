@@ -1,27 +1,27 @@
 <div class="keypad-frame">
-    <button class="top-row-buttons btn">del</button>
-    <button class="top-row-buttons btn">AC</button>
-    <button class="top-row-buttons btn">C</button>
-    <button class="operator-btn btn">/</button>
+    <button class="top-row-button btn">del</button>
+    <button class="top-row-button btn">AC</button>
+    <button class="top-row-button btn">C</button>
+    <button @onclick="() => HandleButtonClick('/')" class="operator-btn btn">/</button>
     
-    <button class="numpad-btn btn">1</button>
-    <button class="numpad-btn btn">2</button>
-    <button class="numpad-btn btn">3</button>
-    <button class="operator-btn btn">*</button>
+    <button @onclick="() => HandleButtonClick('1')" class="numpad-btn btn">1</button>
+    <button @onclick="() => HandleButtonClick('2')" class="numpad-btn btn">2</button>
+    <button @onclick="() => HandleButtonClick('3')" class="numpad-btn btn">3</button>
+    <button @onclick="() => HandleButtonClick('*')" class="operator-btn btn">*</button>
     
-    <button class="numpad-btn btn">4</button>
-    <button class="numpad-btn btn">5</button>
-    <button class="numpad-btn btn">6</button>
-    <button class="operator-btn btn">-</button>
+    <button @onclick="() => HandleButtonClick('4')" class="numpad-btn btn">4</button>
+    <button @onclick="() => HandleButtonClick('5')" class="numpad-btn btn">5</button>
+    <button @onclick="() => HandleButtonClick('6')" class="numpad-btn btn">6</button>
+    <button @onclick="() => HandleButtonClick('-')" class="operator-btn btn">-</button>
     
-    <button class="numpad-btn btn">7</button>
-    <button class="numpad-btn btn">8</button>
-    <button class="numpad-btn btn">9</button>
-    <button class="operator-btn btn">+</button>
+    <button @onclick="() => HandleButtonClick('7')" class="numpad-btn btn">7</button>
+    <button @onclick="() => HandleButtonClick('8')" class="numpad-btn btn">8</button>
+    <button @onclick="() => HandleButtonClick('9')" class="numpad-btn btn">9</button>
+    <button @onclick="() => HandleButtonClick('+')" class="operator-btn btn">+</button>
     
     <button class="numpad-btn btn">flip</button>
-    <button class="numpad-btn btn">0</button>
-    <button class="numpad-btn btn">,</button>
+    <button @onclick="() => HandleButtonClick('0')" class="numpad-btn btn">0</button>
+    <button @onclick="() => HandleButtonClick(',')" class="numpad-btn btn">,</button>
     <button class="operator-btn btn">=</button>
 </div>
 
