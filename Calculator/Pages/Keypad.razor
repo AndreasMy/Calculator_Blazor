@@ -1,8 +1,15 @@
 
 <div class="keypad-frame">
     <button @onclick="HandleBackspaceButton" class="top-row-button btn">del</button>
-    <button class="top-row-button btn">AC</button>
-    <button class="top-row-button btn">C</button>
+    @if (AcToggle)
+    {
+        <button @onclick="HandleResetButton" class="top-row-button btn">C</button>
+    }
+    else
+    {
+        <button @onclick="HandleResetButton" class="top-row-button btn">AC</button>
+    }
+    <button class="top-row-button btn">flip</button>
     <button @onclick="() => HandleOperatorClick('/')" class="operator-btn btn">/</button>
     
     <button @onclick="() => HandleNumpadClick('1')" class="numpad-btn btn">1</button>
@@ -20,7 +27,7 @@
     <button @onclick="() => HandleNumpadClick('9')" class="numpad-btn btn">9</button>
     <button @onclick="() => HandleOperatorClick('+')" class="operator-btn btn">+</button>
     
-    <button class="numpad-btn btn">flip</button>
+    <button class="numpad-btn btn">:-)</button>
     <button @onclick="() => HandleNumpadClick('0')" class="numpad-btn btn">0</button>
     <button @onclick="() => HandleCommaButton('.')" class="numpad-btn btn">,</button>
     <button @onclick="HandleEvaluateButton" class="operator-btn btn">=</button>

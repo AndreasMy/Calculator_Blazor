@@ -8,6 +8,7 @@ public interface IExpressionHandler
     string HandleCommaButton(string input);
     void Clear();
     string OperateOnPreviousResult(string input);
+    string? HandleAcButton();
     
     event Action? OnChange;
 

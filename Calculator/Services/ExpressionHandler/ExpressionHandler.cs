@@ -7,16 +7,16 @@ public class ExpressionHandler(
     ) : IExpressionHandler
 {
     private readonly List<string> _mathExpression = [];
-    
     private List<string> _currentNumberInput = [];
- 
+
+
     public event Action? OnChange;
-    
-    private string? _expression;
+    private string? _expression = "0";
     private string? _result; 
     private bool _hasCalculated;
     private bool _operatorClicked;
 
+    
     public string? Expression
     {
         get => _expression;
@@ -27,6 +27,7 @@ public class ExpressionHandler(
         }
     }
 
+    
     public string? Result
     {
         get => _result;
@@ -37,6 +38,7 @@ public class ExpressionHandler(
         }
     }
 
+    
     public bool HasCalculated
     {
         get => _hasCalculated;
@@ -46,6 +48,7 @@ public class ExpressionHandler(
             OnChange?.Invoke();
         }
     }
+    
 
     public bool OperatorClicked
     {
@@ -56,6 +59,7 @@ public class ExpressionHandler(
             OnChange?.Invoke();
         }
     }
+    
 
     private static bool IsOperator(string token) =>
         new[] { "+", "-", "*", "/"}.Contains(token);
@@ -78,6 +82,7 @@ public class ExpressionHandler(
         }
     }
 
+    
     private bool ExpressionContainsComma(List<string> inputList)
     {
         bool stringContainsComma = false;
@@ -101,6 +106,7 @@ public class ExpressionHandler(
 
         return stringContainsComma;
     }
+    
 
     private void AddToNumber(string input)
     {
@@ -120,6 +126,7 @@ public class ExpressionHandler(
         _mathExpression?.Add(input);
     }
 
+    
     private void Remove(List<string> inputList)
     {
         int lastIndex = inputList.Count - 1;
@@ -127,22 +134,47 @@ public class ExpressionHandler(
             inputList?.RemoveAt(lastIndex);
     }
 
+    
     public void Clear()
     {
         if (_mathExpression.Count > 0)
-        {
             _mathExpression.Clear();
+        
+        if (_currentNumberInput.Count > 0)
             _currentNumberInput.Clear();
-        }
 
-        Expression = string.Empty;
+        Expression = "0";
     }
+    
+    
+    public string? HandleAcButton()
+    {
+        if (_mathExpression.Count == 0)
+        {
+            return "";
+        }
+        
+        if (IsOperator(_mathExpression[^1]))
+            return SetExpressionStringForDisplay();
+        
+        Remove(_mathExpression);
+        _currentNumberInput.Clear();
+        return SetExpressionStringForDisplay();
+    }
+
     
     public string HandleBackspace()
     {
+        if (_mathExpression.Count < 1)
+        {
+            return SetExpressionStringForDisplay();
+        }
+        
         if (IsOperator(_mathExpression[^1]))
         {
             Remove(_mathExpression);
+            
+            // Received help from gpt to use Select instead of Join
             _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
             return SetExpressionStringForDisplay();
         }
@@ -163,12 +195,14 @@ public class ExpressionHandler(
         
         // Update expression array
         string joinedNumber = string.Join("", _currentNumberInput);
+        
         if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
             _mathExpression[^1] = joinedNumber;
         
         return SetExpressionStringForDisplay();
     }
 
+    
     public void HandleEvalButton()
     {
         if (_expression == null) return;
@@ -177,6 +211,7 @@ public class ExpressionHandler(
         Result = result;
     }
 
+    
     public string HandleCalculatorInput(string input)
     {
         if (_operatorClicked)
@@ -191,6 +226,7 @@ public class ExpressionHandler(
         return SetExpressionStringForDisplay();
     }
 
+    
     public string OperateOnPreviousResult(string input)
     {
         string? copiedResult = _result;
@@ -202,6 +238,7 @@ public class ExpressionHandler(
         return SetExpressionStringForDisplay();
     }
     
+    
     public string HandleCommaButton(string input)
     {
         if (ExpressionContainsComma(_currentNumberInput))
@@ -212,6 +249,7 @@ public class ExpressionHandler(
         return SetExpressionStringForDisplay();
     }
     
+    
     private string SetExpressionStringForDisplay()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
@@ -220,6 +258,12 @@ public class ExpressionHandler(
         foreach (string token in tokens)
             mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
 
+
+        if (_mathExpression.Count < 1)
+        {
+            Expression = "0"; 
+            return "0";     
+        }
         Expression = mathExpressionCopy; 
         return mathExpressionCopy;
     } 

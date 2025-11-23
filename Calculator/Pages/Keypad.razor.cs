@@ -8,11 +8,15 @@ public partial class Keypad(
     ) : ComponentBase
 {
     [Inject] public IExpressionHandler Handler { get; set; } = null!;
+    private bool AcToggle { get; set; } = false;
+    private bool AcClearAll { get; set; } = false;
     
     
     private void HandleNumpadClick(char btnText)
     {
         Handler.OperatorClicked = false;
+        AcToggle = true;
+        AcClearAll = false;
         if (Handler.HasCalculated)
         {
             Handler.Clear();
@@ -26,7 +30,8 @@ public partial class Keypad(
     {
         if (Handler.Expression?.Length < 1)
             return;
-
+        
+        AcToggle = true;
         Handler.OperatorClicked = true;
         if (Handler.HasCalculated && Handler.OperatorClicked)
         {
@@ -47,6 +52,17 @@ public partial class Keypad(
     private void HandleBackspaceButton()
     {
         Handler.HandleBackspace();
+    }
+
+
+    private void HandleResetButton()
+    {
+        if (AcClearAll)
+            Handler.Clear();
+        
+        Handler.HandleAcButton();   
+        AcToggle = false;
+        AcClearAll = true;
     }
 
     
