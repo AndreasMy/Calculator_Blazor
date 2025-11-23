@@ -13,6 +13,7 @@ public interface IExpressionHandler
     
 
     bool HasCalculated { get; set; }
+    bool OperatorClicked { get; set; }
     string? Expression { get; set; }
     string? Result { get; set; }
 }

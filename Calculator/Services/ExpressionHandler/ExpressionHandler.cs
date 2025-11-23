@@ -7,13 +7,15 @@ public class ExpressionHandler(
     ) : IExpressionHandler
 {
     private readonly List<string> _mathExpression = [];
-    private readonly List<string> _input = [];
+    
+    private readonly List<string> _currentNumberInput = [];
  
     public event Action? OnChange;
     
     private string? _expression;
     private string? _result; 
     private bool _hasCalculated;
+    private bool _operatorClicked;
 
     public string? Expression
     {
@@ -44,9 +46,18 @@ public class ExpressionHandler(
             OnChange?.Invoke();
         }
     }
-    
-    
-    
+
+    public bool OperatorClicked
+    {
+        get => _operatorClicked;
+        set
+        {
+            _operatorClicked = value;
+            Console.WriteLine($"Operator clicked state: {_operatorClicked}");
+            OnChange?.Invoke();
+        }
+    }
+
     private static bool IsOperator(string token) =>
         new[] { "+", "-", "*", "/"}.Contains(token);
 
@@ -91,7 +102,19 @@ public class ExpressionHandler(
         return stringContainsComma;
     }
 
-    private void Add(string input)
+    private void AddToNumberList(string input)
+    {
+        _currentNumberInput.Add(input);
+        string joinedNumber = string.Join("", _currentNumberInput);
+
+        if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
+            _mathExpression[^1] = joinedNumber;
+        else
+            _mathExpression.Add(joinedNumber);
+    }
+    
+
+    private void AddToExpressionList(string input)
     {
         RemoveDuplicateToken(input, IsOperator);
         _mathExpression?.Add(input);
@@ -112,7 +135,7 @@ public class ExpressionHandler(
         Expression = string.Empty;
     }
 
-    private string SetExpressionString()
+    private string SetExpressionStringForDisplay()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
         string[] tokens = { "+", "-", "*", "/" };
@@ -127,7 +150,7 @@ public class ExpressionHandler(
     public string HandleBackspace()
     {
         Remove();
-        return SetExpressionString();
+        return SetExpressionStringForDisplay();
     }
 
     public void HandleEvalButton()
@@ -140,17 +163,26 @@ public class ExpressionHandler(
 
     public string HandleCalculatorInput(string input)
     {
-        Add(input);
-        return SetExpressionString();
+        if (_operatorClicked)
+        {
+            _currentNumberInput.Clear();
+            AddToExpressionList(input);
+        }
+        else
+        {
+            AddToNumberList(input);
+            Console.WriteLine(string.Join(", ", _mathExpression));
+        }
+        return SetExpressionStringForDisplay();
     }
     
     public string HandleCommaButton(string input)
     {
         if (ExpressionContainsComma())
-            return SetExpressionString();
+            return SetExpressionStringForDisplay();
         
         RemoveDuplicateToken(input, IsComma);
         _mathExpression?.Add(input);
-        return SetExpressionString();
+        return SetExpressionStringForDisplay();
     }
 }
