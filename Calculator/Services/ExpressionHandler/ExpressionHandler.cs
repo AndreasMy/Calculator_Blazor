@@ -8,7 +8,7 @@ public class ExpressionHandler(
 {
     private readonly List<string> _mathExpression = [];
     
-    private readonly List<string> _currentNumberInput = [];
+    private List<string> _currentNumberInput = [];
  
     public event Action? OnChange;
     
@@ -74,7 +74,7 @@ public class ExpressionHandler(
 
         if (tokenIsMatch && inputIsMatch)
         {
-            Remove();
+            Remove(inputList);
         }
     }
 
@@ -120,11 +120,11 @@ public class ExpressionHandler(
         _mathExpression?.Add(input);
     }
 
-    private void Remove()
+    private void Remove(List<string> inputList)
     {
-        int lastIndex = _mathExpression.Count - 1;
-        if (_mathExpression.Count > 0)
-            _mathExpression?.RemoveAt(lastIndex);
+        int lastIndex = inputList.Count - 1;
+        if (inputList.Count > 0)
+            inputList?.RemoveAt(lastIndex);
     }
 
     public void Clear()
@@ -140,7 +140,32 @@ public class ExpressionHandler(
     
     public string HandleBackspace()
     {
-        Remove();
+        if (IsOperator(_mathExpression[^1]))
+        {
+            Remove(_mathExpression);
+            _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
+            return SetExpressionStringForDisplay();
+        }
+
+        if (IsOperator(_mathExpression[^1]) || _currentNumberInput.Count <= 0)
+        {
+            Remove(_mathExpression);
+            return SetExpressionStringForDisplay();
+        }
+        
+        Remove(_currentNumberInput);
+        
+        if (!IsOperator(_mathExpression[^1]) && _currentNumberInput.Count == 0)
+        {
+            Remove(_mathExpression);
+            return SetExpressionStringForDisplay();
+        }
+        
+        // Update expression array
+        string joinedNumber = string.Join("", _currentNumberInput);
+        if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
+            _mathExpression[^1] = joinedNumber;
+        
         return SetExpressionStringForDisplay();
     }
 

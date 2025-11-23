@@ -9,6 +9,7 @@ public partial class Keypad(
 {
     [Inject] public IExpressionHandler Handler { get; set; } = null!;
     
+    
     private void HandleNumpadClick(char btnText)
     {
         Handler.OperatorClicked = false;
@@ -19,6 +20,7 @@ public partial class Keypad(
         }
         Handler.HandleCalculatorInput(btnText.ToString());
     }
+    
     
     private void HandleOperatorClick(char btnText)
     {
@@ -35,11 +37,19 @@ public partial class Keypad(
         Handler.HandleCalculatorInput(btnText.ToString());
     }
 
+    
     private void HandleCommaButton(char btnText)
     {
         Handler.HandleCommaButton(btnText.ToString());
     }
 
+    
+    private void HandleBackspaceButton()
+    {
+        Handler.HandleBackspace();
+    }
+
+    
     private void HandleEvaluateButton()
     {
         Handler.HandleEvalButton();

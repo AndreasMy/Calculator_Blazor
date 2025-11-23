@@ -1,6 +1,6 @@
 
 <div class="keypad-frame">
-    <button class="top-row-button btn">del</button>
+    <button @onclick="HandleBackspaceButton" class="top-row-button btn">del</button>
     <button class="top-row-button btn">AC</button>
     <button class="top-row-button btn">C</button>
     <button @onclick="() => HandleOperatorClick('/')" class="operator-btn btn">/</button>
