@@ -13,6 +13,4 @@ public partial class Keypad(
         string newExpression = expressionHandler.HandleCalculatorInput(btnText.ToString());
         Console.WriteLine(newExpression);
     }
-    
-    
 }

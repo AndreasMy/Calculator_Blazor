@@ -3,16 +3,23 @@ using Microsoft.AspNetCore.Components;
 
 namespace Calculator.Pages;
 
-public partial class Display(
-    IExpressionHandler expressionHandler
-    ) : ComponentBase
+public class DisplayBase : ComponentBase, IDisposable
 {
-    private string PrimaryDisplay { get; set; }
-    private string SecondaryDisplay { get; set; }
+    [Inject] public IExpressionHandler Handler { get; set; } = null!;
+    protected string? Expression => Handler.Expression;
 
-    private void GetExpression()
+    protected override void OnInitialized()
     {
-        string expression = expressionHandler.GetExpressionString();
-        Console.WriteLine($"");
+        Handler.OnChange += Refresh;
+    }
+
+    private void Refresh()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Handler.OnChange -= Refresh;
     }
 }

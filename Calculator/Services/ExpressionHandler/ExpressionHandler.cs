@@ -4,6 +4,19 @@ public class ExpressionHandler : IExpressionHandler
 {
 private readonly List<string> _mathExpression = [];
 
+    public event Action? OnChange;
+
+    public string? Expression
+    {
+        get => _expression;
+        set
+        {
+            _expression = value;
+            OnChange?.Invoke();   // notify listeners
+        }
+    }
+    private string? _expression;
+
     private static bool IsOperator(string token) =>
         new[] { "+", "-", "*", "/"}.Contains(token);
 
@@ -69,36 +82,37 @@ private readonly List<string> _mathExpression = [];
         return string.Empty;
     }
 
-    public string GetExpressionString()
+    public string SetExpressionString()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
         string[] tokens = { "+", "-", "*", "/" };
 
         foreach (string token in tokens)
             mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
-        
+
+        Expression = mathExpressionCopy; // I think I only need to set the expression here
         return mathExpressionCopy;
     } 
 
     public string HandleBackspace()
     {
         Remove();
-        return GetExpressionString();
+        return SetExpressionString();
     }
     
     public string HandleCalculatorInput(string input)
     {
         Add(input);
-        return GetExpressionString();
+        return SetExpressionString();
     }
     
     public string HandleCommaButton(string input)
     {
         if (ExpressionContainsComma())
-            return GetExpressionString();
+            return SetExpressionString();
         
         RemoveDuplicateToken(input, IsComma);
         _mathExpression?.Add(input);
-        return GetExpressionString();
+        return SetExpressionString();
     }
 }

@@ -6,5 +6,8 @@ public interface IExpressionHandler
     string HandleBackspace();
     string HandleCommaButton(string input);
     string Clear();
-    string GetExpressionString();
+    string SetExpressionString();
+    event Action? OnChange;
+
+    string? Expression { get; set; }
 }
