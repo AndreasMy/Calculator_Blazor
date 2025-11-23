@@ -26,8 +26,13 @@ public partial class Keypad(
             return;
 
         Handler.OperatorClicked = true;
+        if (Handler.HasCalculated && Handler.OperatorClicked)
+        {
+            Handler.OperateOnPreviousResult(btnText.ToString());
+            Handler.HasCalculated = false;
+        }
+        
         Handler.HandleCalculatorInput(btnText.ToString());
-        // Handler.OperatorClicked = false;
     }
 
     private void HandleEvaluateButton()

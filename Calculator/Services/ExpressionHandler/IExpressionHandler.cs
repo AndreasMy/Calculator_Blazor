@@ -7,7 +7,8 @@ public interface IExpressionHandler
     void HandleEvalButton();
     string HandleCommaButton(string input);
     void Clear();
-
+    string OperateOnPreviousResult(string input);
+    
     event Action? OnChange;
 
     

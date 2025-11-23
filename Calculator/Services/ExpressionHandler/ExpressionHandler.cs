@@ -53,7 +53,6 @@ public class ExpressionHandler(
         set
         {
             _operatorClicked = value;
-            Console.WriteLine($"Operator clicked state: {_operatorClicked}");
             OnChange?.Invoke();
         }
     }
@@ -64,6 +63,7 @@ public class ExpressionHandler(
     private static bool IsComma(string token) =>
         new[] { "." }.Contains(token);
 
+    
     private void RemoveDuplicateToken(string input, Func<string, bool> tokenChecker)
     {
         int lastIndex = _mathExpression.Count - 1;
@@ -130,23 +130,14 @@ public class ExpressionHandler(
     public void Clear()
     {
         if (_mathExpression.Count > 0)
+        {
             _mathExpression.Clear();
+            _currentNumberInput.Clear();
+        }
 
         Expression = string.Empty;
     }
-
-    private string SetExpressionStringForDisplay()
-    {
-        string mathExpressionCopy = string.Join("", _mathExpression);
-        string[] tokens = { "+", "-", "*", "/" };
-
-        foreach (string token in tokens)
-            mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
-
-        Expression = mathExpressionCopy; 
-        return mathExpressionCopy;
-    } 
-
+    
     public string HandleBackspace()
     {
         Remove();
@@ -171,8 +162,18 @@ public class ExpressionHandler(
         else
         {
             AddToNumberList(input);
-            Console.WriteLine(string.Join(", ", _mathExpression));
         }
+        return SetExpressionStringForDisplay();
+    }
+
+    public string OperateOnPreviousResult(string input)
+    {
+        string? copiedResult = _result;
+        Clear();
+        
+        if (copiedResult != null) _mathExpression.Add(copiedResult);
+        _mathExpression.Add(input);
+        
         return SetExpressionStringForDisplay();
     }
     
@@ -185,4 +186,16 @@ public class ExpressionHandler(
         _mathExpression?.Add(input);
         return SetExpressionStringForDisplay();
     }
+    
+    private string SetExpressionStringForDisplay()
+    {
+        string mathExpressionCopy = string.Join("", _mathExpression);
+        string[] tokens = { "+", "-", "*", "/" };
+
+        foreach (string token in tokens)
+            mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
+
+        Expression = mathExpressionCopy; 
+        return mathExpressionCopy;
+    } 
 }
