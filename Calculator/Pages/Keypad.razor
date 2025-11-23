@@ -23,6 +23,6 @@
     <button class="numpad-btn btn">flip</button>
     <button @onclick="() => HandleButtonClick('0')" class="numpad-btn btn">0</button>
     <button @onclick="() => HandleButtonClick(',')" class="numpad-btn btn">,</button>
-    <button class="operator-btn btn">=</button>
+    <button @onclick="HandleEvaluateButton" class="operator-btn btn">=</button>
 </div>
 

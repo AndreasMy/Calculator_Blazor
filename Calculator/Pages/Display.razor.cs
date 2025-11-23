@@ -6,7 +6,8 @@ namespace Calculator.Pages;
 public class DisplayBase : ComponentBase, IDisposable
 {
     [Inject] public IExpressionHandler Handler { get; set; } = null!;
-    protected string? Expression => Handler.Expression;
+    protected string? PrimaryDisplay => Handler.HasCalculated ? Handler.Result : Handler.Expression;
+    protected string? SecondaryDisplay => Handler.HasCalculated ? Handler.Expression : string.Empty;
 
     protected override void OnInitialized()
     {

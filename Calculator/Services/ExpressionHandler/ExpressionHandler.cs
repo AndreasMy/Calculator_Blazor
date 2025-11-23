@@ -1,10 +1,18 @@
+using Calculator.Services.NCalcCalculator;
+
 namespace Calculator.Services.ExpressionHandler;
 
-public class ExpressionHandler : IExpressionHandler
+public class ExpressionHandler(
+    INCalcCalculator nCalcCalculator
+    ) : IExpressionHandler
 {
-private readonly List<string> _mathExpression = [];
+    private readonly List<string> _mathExpression = [];
 
     public event Action? OnChange;
+    
+    private string? _expression;
+    private string? _result; 
+    private bool _hasCalculated;
 
     public string? Expression
     {
@@ -12,11 +20,35 @@ private readonly List<string> _mathExpression = [];
         set
         {
             _expression = value;
-            OnChange?.Invoke();   // notify listeners
+            OnChange?.Invoke();   
         }
     }
-    private string? _expression;
 
+    public string? Result
+    {
+        get => _result;
+        set
+        {
+            _result = value;
+            OnChange?.Invoke();
+        }
+    }
+
+    public bool HasCalculated
+    {
+        get => _hasCalculated;
+        set
+        {
+            _hasCalculated = value;
+            OnChange?.Invoke();
+        }
+    }
+
+    public void SetHasCalculated()
+    {
+        _hasCalculated = true;
+    }
+    
     private static bool IsOperator(string token) =>
         new[] { "+", "-", "*", "/"}.Contains(token);
 
@@ -74,12 +106,12 @@ private readonly List<string> _mathExpression = [];
             _mathExpression?.RemoveAt(lastIndex);
     }
 
-    public string Clear()
+    public void Clear()
     {
         if (_mathExpression.Count > 0)
             _mathExpression.Clear();
 
-        return string.Empty;
+        Expression = string.Empty;
     }
 
     public string SetExpressionString()
@@ -99,7 +131,15 @@ private readonly List<string> _mathExpression = [];
         Remove();
         return SetExpressionString();
     }
-    
+
+    public void HandleEvalButton()
+    {
+        if (_expression == null) return;
+        if (_expression.Length <= 2) return;
+        string? result = nCalcCalculator.Evaluate(_expression).ToString();
+        Result = result;
+    }
+
     public string HandleCalculatorInput(string input)
     {
         Add(input);
