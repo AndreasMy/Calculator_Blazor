@@ -7,7 +7,8 @@ public class ExpressionHandler(
     ) : IExpressionHandler
 {
     private readonly List<string> _mathExpression = [];
-
+    private readonly List<string> _input = [];
+ 
     public event Action? OnChange;
     
     private string? _expression;
@@ -43,11 +44,8 @@ public class ExpressionHandler(
             OnChange?.Invoke();
         }
     }
-
-    public void SetHasCalculated()
-    {
-        _hasCalculated = true;
-    }
+    
+    
     
     private static bool IsOperator(string token) =>
         new[] { "+", "-", "*", "/"}.Contains(token);
@@ -83,7 +81,7 @@ public class ExpressionHandler(
                 stringContainsComma = true;
                 break;
             }
-            else if (tokenIsOperator)
+            if (tokenIsOperator)
             {
                 stringContainsComma = false;
                 break;
@@ -114,7 +112,7 @@ public class ExpressionHandler(
         Expression = string.Empty;
     }
 
-    public string SetExpressionString()
+    private string SetExpressionString()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
         string[] tokens = { "+", "-", "*", "/" };
@@ -122,7 +120,7 @@ public class ExpressionHandler(
         foreach (string token in tokens)
             mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
 
-        Expression = mathExpressionCopy; // I think I only need to set the expression here
+        Expression = mathExpressionCopy; 
         return mathExpressionCopy;
     } 
 
