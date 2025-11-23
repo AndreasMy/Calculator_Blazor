@@ -64,10 +64,10 @@ public class ExpressionHandler(
         new[] { "." }.Contains(token);
 
     
-    private void RemoveDuplicateToken(string input, Func<string, bool> tokenChecker)
+    private void RemoveDuplicateToken(List<string> inputList, string input, Func<string, bool> tokenChecker)
     {
-        int lastIndex = _mathExpression.Count - 1;
-        string token = _mathExpression.Count == 0 ? "" : _mathExpression[lastIndex];
+        int lastIndex = inputList.Count - 1;
+        string token = inputList.Count == 0 ? "" : inputList[lastIndex];
 
         bool tokenIsMatch = tokenChecker(token);
         bool inputIsMatch = tokenChecker(input);
@@ -78,14 +78,14 @@ public class ExpressionHandler(
         }
     }
 
-    private bool ExpressionContainsComma()
+    private bool ExpressionContainsComma(List<string> inputList)
     {
         bool stringContainsComma = false;
         
-        for (int i = _mathExpression.Count; i > 0; i--)
+        for (int i = inputList.Count; i > 0; i--)
         {
-            bool tokenIsComma = IsComma(_mathExpression[i - 1]);
-            bool tokenIsOperator = IsOperator(_mathExpression[i - 1]);
+            bool tokenIsComma = IsComma(inputList[i - 1]);
+            bool tokenIsOperator = IsOperator(inputList[i - 1]);
 
             if (tokenIsComma)
             {
@@ -102,7 +102,7 @@ public class ExpressionHandler(
         return stringContainsComma;
     }
 
-    private void AddToNumberList(string input)
+    private void AddToNumber(string input)
     {
         _currentNumberInput.Add(input);
         string joinedNumber = string.Join("", _currentNumberInput);
@@ -114,9 +114,9 @@ public class ExpressionHandler(
     }
     
 
-    private void AddToExpressionList(string input)
+    private void AddToExpression(string input)
     {
-        RemoveDuplicateToken(input, IsOperator);
+        RemoveDuplicateToken(_mathExpression, input, IsOperator);
         _mathExpression?.Add(input);
     }
 
@@ -157,11 +157,11 @@ public class ExpressionHandler(
         if (_operatorClicked)
         {
             _currentNumberInput.Clear();
-            AddToExpressionList(input);
+            AddToExpression(input);
         }
         else
         {
-            AddToNumberList(input);
+            AddToNumber(input);
         }
         return SetExpressionStringForDisplay();
     }
@@ -179,11 +179,11 @@ public class ExpressionHandler(
     
     public string HandleCommaButton(string input)
     {
-        if (ExpressionContainsComma())
+        if (ExpressionContainsComma(_currentNumberInput))
             return SetExpressionStringForDisplay();
         
-        RemoveDuplicateToken(input, IsComma);
-        _mathExpression?.Add(input);
+        RemoveDuplicateToken(_currentNumberInput, input, IsComma);
+        AddToNumber(input);
         return SetExpressionStringForDisplay();
     }
     

@@ -35,6 +35,11 @@ public partial class Keypad(
         Handler.HandleCalculatorInput(btnText.ToString());
     }
 
+    private void HandleCommaButton(char btnText)
+    {
+        Handler.HandleCommaButton(btnText.ToString());
+    }
+
     private void HandleEvaluateButton()
     {
         Handler.HandleEvalButton();
