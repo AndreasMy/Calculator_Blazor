@@ -78,7 +78,7 @@ public class ExpressionHandler(
 
         if (tokenIsMatch && inputIsMatch)
         {
-            Remove(inputList);
+            RemoveLastItem(inputList);
         }
     }
 
@@ -127,7 +127,7 @@ public class ExpressionHandler(
     }
 
     
-    private void Remove(List<string> inputList)
+    private static void RemoveLastItem(List<string> inputList)
     {
         int lastIndex = inputList.Count - 1;
         if (inputList.Count > 0)
@@ -155,11 +155,11 @@ public class ExpressionHandler(
         }
         
         if (IsOperator(_mathExpression[^1]))
-            return SetExpressionStringForDisplay();
+            return UpdateDisplay();
         
-        Remove(_mathExpression);
+        RemoveLastItem(_mathExpression);
         _currentNumberInput.Clear();
-        return SetExpressionStringForDisplay();
+        return UpdateDisplay();
     }
 
     
@@ -167,30 +167,31 @@ public class ExpressionHandler(
     {
         if (_mathExpression.Count < 1)
         {
-            return SetExpressionStringForDisplay();
+            return UpdateDisplay();
         }
         
         if (IsOperator(_mathExpression[^1]))
         {
-            Remove(_mathExpression);
+            RemoveLastItem(_mathExpression);
             
             // Received help from gpt to use Select instead of Join
+            // Initializes 
             _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
-            return SetExpressionStringForDisplay();
+            return UpdateDisplay();
         }
 
         if (IsOperator(_mathExpression[^1]) || _currentNumberInput.Count <= 0)
         {
-            Remove(_mathExpression);
-            return SetExpressionStringForDisplay();
+            RemoveLastItem(_mathExpression);
+            return UpdateDisplay();
         }
         
-        Remove(_currentNumberInput);
+        RemoveLastItem(_currentNumberInput);
         
         if (!IsOperator(_mathExpression[^1]) && _currentNumberInput.Count == 0)
         {
-            Remove(_mathExpression);
-            return SetExpressionStringForDisplay();
+            RemoveLastItem(_mathExpression);
+            return UpdateDisplay();
         }
         
         // Update expression array
@@ -199,7 +200,7 @@ public class ExpressionHandler(
         if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
             _mathExpression[^1] = joinedNumber;
         
-        return SetExpressionStringForDisplay();
+        return UpdateDisplay();
     }
 
     
@@ -223,9 +224,28 @@ public class ExpressionHandler(
         {
             AddToNumber(input);
         }
-        return SetExpressionStringForDisplay();
+        return UpdateDisplay();
     }
 
+
+    public string HandleSignToggle()
+    {
+        if (IsOperator(_mathExpression[^1]))
+        {
+            string replaceWith = _mathExpression[^1] == "+" ? "-" : "+";
+            RemoveLastItem(_mathExpression);
+            _mathExpression.Add(replaceWith);
+        }
+
+        if (!IsOperator(_mathExpression[^1]))
+        {
+            int operatorIndex = _mathExpression.Count - 2;
+            string replaceWith = _mathExpression[operatorIndex] == "+" ? "-" : "+";
+            _mathExpression[operatorIndex] = replaceWith;
+        }
+        return UpdateDisplay();
+    }
+    
     
     public string OperateOnPreviousResult(string input)
     {
@@ -235,22 +255,22 @@ public class ExpressionHandler(
         if (copiedResult != null) _mathExpression.Add(copiedResult);
         _mathExpression.Add(input);
         
-        return SetExpressionStringForDisplay();
+        return UpdateDisplay();
     }
     
     
     public string HandleCommaButton(string input)
     {
         if (ExpressionContainsComma(_currentNumberInput))
-            return SetExpressionStringForDisplay();
+            return UpdateDisplay();
         
         RemoveDuplicateToken(_currentNumberInput, input, IsComma);
         AddToNumber(input);
-        return SetExpressionStringForDisplay();
+        return UpdateDisplay();
     }
     
     
-    private string SetExpressionStringForDisplay()
+    private string UpdateDisplay()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
         string[] tokens = { "+", "-", "*", "/" };

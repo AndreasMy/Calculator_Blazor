@@ -55,9 +55,18 @@ public partial class Keypad(
     }
 
 
+    private void HandleSignToggleButton()
+    {
+        Handler.HandleSignToggle();
+    }
+
+
     private void HandleResetButton()
     {
         if (AcClearAll)
+            Handler.Clear();
+        
+        if (Handler.HasCalculated)
             Handler.Clear();
         
         Handler.HandleAcButton();   

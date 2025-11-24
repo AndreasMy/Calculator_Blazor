@@ -9,7 +9,7 @@
     {
         <button @onclick="HandleResetButton" class="top-row-button btn">AC</button>
     }
-    <button class="top-row-button btn">flip</button>
+    <button @onclick="HandleSignToggleButton" class="top-row-button btn">&plusmn;</button>
     <button @onclick="() => HandleOperatorClick('/')" class="operator-btn btn">/</button>
     
     <button @onclick="() => HandleNumpadClick('1')" class="numpad-btn btn">1</button>
