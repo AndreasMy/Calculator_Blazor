@@ -1,5 +1,6 @@
 using Calculator.Services.ExpressionHandler;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Calculator.Pages;
 
@@ -7,6 +8,8 @@ public partial class Keypad(
 
     ) : ComponentBase
 {
+    [Inject] IJSRuntime JS { get; set; } = null!;
+
     [Inject] public IExpressionHandler Handler { get; set; } = null!;
     private bool AcToggle { get; set; } = false;
     private bool AcClearAll { get; set; } = false;
@@ -74,6 +77,13 @@ public partial class Keypad(
         AcClearAll = true;
     }
 
+    private async Task ExperienceHappinessAndJoy()
+    {
+        await JS.InvokeVoidAsync(
+            "open", 
+            "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1", 
+            "_blank");
+    }
     
     private void HandleEvaluateButton()
     {

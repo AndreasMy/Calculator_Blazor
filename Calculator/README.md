@@ -1,5 +1,82 @@
+# Blazor Calculator
+
+A simple calculator build with Blazor as part of a school curriculum. This calculator uses NCalc to perform calculations on string expressions. I decided to use the expression based approach because of the benefits that comes with parsing a string expression. This way, I could reduce state management at the component level and handle the string building logic to its own service.  
+
+### Known issues
+
+- I did not get to implement a responsive layout.
+- Clicking del after calculation will edit the expression string. It's simple to fix, but I'm out of time. 
+- **ExpressionHandler** is cluttered. I would love to have moved the state logic to its own class.
+
 # A.I. usage
 
+
+## Old code
+
+The **ExpressionHandler** was ported from an old project I wrote this spring, and adapted to meet the requirements for this assignment. I cannot document precisely the AI usage, but I'll include the code where I think I received the most help. The rough plan was mine, the solution was provided. 
+
+Now that I think of it, this code could be removed and I could instead use boolean flags in the component to toggle button activation. This code might also be slightly outdated after I changed how the expression string is built for this project.
+
+```csharp
+// Old structure
+["1", ".", "2", "+", "2", "2", "2"]
+```
+
+```csharp
+//New structure
+["1.2", "+", "222"]
+```
+
+```csharp
+    private static bool IsOperator(string token) =>
+        new[] { "+", "-", "*", "/"}.Contains(token);
+
+    private static bool IsComma(string token) =>
+        new[] { "." }.Contains(token);
+
+    
+    private void RemoveDuplicateToken(List<string> inputList, string input, Func<string, bool> tokenChecker)
+    {
+        int lastIndex = inputList.Count - 1;
+        string token = inputList.Count == 0 ? "" : inputList[lastIndex];
+
+        bool tokenIsMatch = tokenChecker(token);
+        bool inputIsMatch = tokenChecker(input);
+
+        if (tokenIsMatch && inputIsMatch)
+        {
+            RemoveLastItem(inputList);
+        }
+    }
+```
+
+```csharp
+    private bool ExpressionContainsComma(List<string> inputList)
+    {
+        bool stringContainsComma = false;
+        
+        for (int i = inputList.Count; i > 0; i--)
+        {
+            bool tokenIsComma = IsComma(inputList[i - 1]);
+            bool tokenIsOperator = IsOperator(inputList[i - 1]);
+
+            if (tokenIsComma)
+            {
+                stringContainsComma = true;
+                break;
+            }
+            if (tokenIsOperator)
+            {
+                stringContainsComma = false;
+                break;
+            }
+        }
+
+        return stringContainsComma;
+    }
+```
+
+## New code
 
 ### Prompt
 
