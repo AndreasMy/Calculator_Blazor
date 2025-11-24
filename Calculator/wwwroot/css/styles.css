@@ -92,8 +92,13 @@ button {
     font-size: 1.7em;
 }
 
-.btn {
+.btn:hover {
+    border: solid #3e5b3b 1px;
+}
 
+.btn:active {
+    width: 103%;
+    height: 103%;
 }
 
 .numpad-btn {
