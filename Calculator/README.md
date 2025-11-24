@@ -5,6 +5,7 @@ A simple calculator build with Blazor as part of a school curriculum. This calcu
 ### Known issues
 
 - I did not get to implement a responsive layout.
+- I have not handled display overflow.
 - Clicking del after calculation will edit the expression string. It's simple to fix, but I'm out of time. 
 - **ExpressionHandler** is cluttered. I would love to have moved the state logic to its own class.
 
