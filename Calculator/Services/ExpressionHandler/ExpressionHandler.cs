@@ -170,22 +170,11 @@ public partial class ExpressionHandler(
             UpdateDisplay();
         }
         
-        if (IsOperator(_mathExpression[^1]))
-        {
-            RemoveLastItem(_mathExpression);
-            
-            // Received help from gpt to use Select instead of Join
-            _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
-            UpdateDisplay();
-        }
-
         if (IsOperator(_mathExpression[^1]) || _currentNumberInput.Count <= 0)
         {
             RemoveLastItem(_mathExpression);
             UpdateDisplay();
         }
-        
-        RemoveLastItem(_currentNumberInput);
         
         if (!IsOperator(_mathExpression[^1]) && _currentNumberInput.Count == 0)
         {
@@ -193,13 +182,27 @@ public partial class ExpressionHandler(
             UpdateDisplay();
         }
         
-        // Update expression array
-        string joinedNumber = string.Join("", _currentNumberInput);
-        
-        if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
-            _mathExpression[^1] = joinedNumber;
-        
-        UpdateDisplay();
+        if (IsOperator(_mathExpression[^1]))
+        {
+            RemoveLastItem(_mathExpression);
+            
+            // Received help from gpt to use Select instead of Join
+            _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
+            UpdateDisplay();
+            return;
+        }
+
+        if (_currentNumberInput.Count >= 1)
+        {
+            RemoveLastItem(_currentNumberInput);
+            // Update expression array
+            string joinedNumber = string.Join("", _currentNumberInput);
+            
+            if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
+                _mathExpression[^1] = joinedNumber;
+            
+            UpdateDisplay();
+        }
     }
 
     

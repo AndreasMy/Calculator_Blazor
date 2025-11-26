@@ -2,12 +2,38 @@
 
 A simple calculator build with Blazor as part of a school curriculum. This calculator uses NCalc to perform calculations on string expressions. I decided to use the expression based approach because of the benefits that comes with parsing a string expression. This way, I could reduce state management at the component level and handle the string building logic to its own service.  
 
+### Expected behavior
+
+I tried to model the button behavior to loosely match the behavior of the iPhone calculator. This calculator does not toggle positive or negative numbers (**1 * ( - 2)**), only the operator signs themselves.
+
+#### Backspace button
+
+- Is disabled if result has been calculated.
+
+#### AC button
+
+- Is displayed as 'AC' or 'C' depending on whether a number has been entered. 
+- If signed number, number is removed and the sign is kept. A second click will clear all.
+
+#### Sign Toggle button
+
+- Toggles +/- at last index or if the last number is signed with +/-. Does not toggle * or /.
+
+#### Operator buttons
+
+- Replaces previously entered operator.
+- Takes the calculated result and adds the operator at the end if a calculation has been performed.
+
+#### Number buttons
+
+- Clears the display and enters the new number if a calculation has been performed.
+
+
 ### Known issues
 
 - I did not get to implement a responsive layout.
 - I have not handled display overflow.
-- Clicking del after calculation will edit the expression string. It's simple to fix, but I'm out of time. 
-- **ExpressionHandler** is cluttered. I would love to have moved the state logic to its own class.
+- **ExpressionHandler** is cluttered. I would love to have moved the state logic to its own class. I think I could move the state variables to global scope?
 
 # A.I. usage
 
