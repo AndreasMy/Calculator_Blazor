@@ -54,23 +54,32 @@ public partial class Keypad(
     
     private void HandleBackspaceButton()
     {
+        if (Handler.HasCalculated)
+            return;
+        
         Handler.HandleBackspace();
     }
 
 
     private void HandleSignToggleButton()
     {
+        if (Handler.HasCalculated)
+            return;
+        
         Handler.HandleSignToggle();
     }
 
 
-    private void HandleResetButton()
+    private void HandleClearButton()
     {
         if (AcClearAll)
             Handler.Clear();
-        
+
         if (Handler.HasCalculated)
+        {
+            Handler.HasCalculated = false;
             Handler.Clear();
+        }
         
         Handler.HandleAcButton();   
         AcToggle = false;

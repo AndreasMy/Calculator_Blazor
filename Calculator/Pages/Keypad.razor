@@ -3,11 +3,11 @@
     <button @onclick="HandleBackspaceButton" class="top-row-button btn">del</button>
     @if (AcToggle)
     {
-        <button @onclick="HandleResetButton" class="top-row-button btn">C</button>
+        <button @onclick="HandleClearButton" class="top-row-button btn">C</button>
     }
     else
     {
-        <button @onclick="HandleResetButton" class="top-row-button btn">AC</button>
+        <button @onclick="HandleClearButton" class="top-row-button btn">AC</button>
     }
     <button @onclick="HandleSignToggleButton" class="top-row-button btn">&plusmn;</button>
     <button @onclick="() => HandleOperatorClick('/')" class="operator-btn btn">/</button>

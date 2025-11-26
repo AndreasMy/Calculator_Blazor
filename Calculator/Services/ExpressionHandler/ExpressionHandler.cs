@@ -144,6 +144,7 @@ public partial class ExpressionHandler(
         if (_currentNumberInput.Count > 0)
             _currentNumberInput.Clear();
 
+        UpdateDisplay();
         Expression = "0";
     }
     
@@ -278,22 +279,20 @@ public partial class ExpressionHandler(
     }
     
     
-    private string UpdateDisplay()
+    private void UpdateDisplay()
     {
         string mathExpressionCopy = string.Join("", _mathExpression);
         string[] tokens = { "+", "-", "*", "/" };
 
         foreach (string token in tokens)
             mathExpressionCopy = mathExpressionCopy.Replace(token, $" {token} ");
-
-
-        if (_mathExpression.Count < 1)
+        
+        if (_mathExpression.Count == 0)
         {
-            Expression = "0"; 
-            return "0";     
+            mathExpressionCopy = "0"; 
         }
+        
         Expression = mathExpressionCopy; 
-        return mathExpressionCopy;
     }
 
     
