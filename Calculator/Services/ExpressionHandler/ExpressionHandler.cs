@@ -1,8 +1,9 @@
+using System.Text.RegularExpressions;
 using Calculator.Services.NCalcCalculator;
 
 namespace Calculator.Services.ExpressionHandler;
 
-public class ExpressionHandler(
+public partial class ExpressionHandler(
     INCalcCalculator nCalcCalculator
     ) : IExpressionHandler
 {
@@ -227,19 +228,29 @@ public class ExpressionHandler(
 
     public void HandleSignToggle()
     {
-        if (IsOperator(_mathExpression[^1]))
+        int operatorIndex = _mathExpression.Count - 2;
+        
+        // If last index IS +/- operator
+        if (IsOperator(_mathExpression[^1]) 
+            && !MultiplyOrDivide().IsMatch(_mathExpression[^1]))
         {
             string replaceWith = _mathExpression[^1] == "+" ? "-" : "+";
             RemoveLastItem(_mathExpression);
             _mathExpression.Add(replaceWith);
         }
 
-        if (!IsOperator(_mathExpression[^1]))
+        // If last index HAS +/- sign
+        if (!IsOperator(_mathExpression[^1]) 
+            && !(MultiplyOrDivide().IsMatch(_mathExpression[operatorIndex])))
         {
-            int operatorIndex = _mathExpression.Count - 2;
-            string replaceWith = _mathExpression[operatorIndex] == "+" ? "-" : "+";
-            _mathExpression[operatorIndex] = replaceWith;
+            _mathExpression[operatorIndex] = _mathExpression[operatorIndex] == "+" ? "-" : "+";
         }
+        
+        // if operator at either index is not +/-
+        if (IsOperator(_mathExpression[^1]) && MultiplyOrDivide().IsMatch(_mathExpression[^1])
+            || !IsOperator(_mathExpression[^1]) && (MultiplyOrDivide().IsMatch(_mathExpression[operatorIndex])))
+            return;
+        
         UpdateDisplay();
     }
     
@@ -283,5 +294,9 @@ public class ExpressionHandler(
         }
         Expression = mathExpressionCopy; 
         return mathExpressionCopy;
-    } 
+    }
+
+    
+    [GeneratedRegex(@"[*/]")]
+    private static partial Regex MultiplyOrDivide();
 }
