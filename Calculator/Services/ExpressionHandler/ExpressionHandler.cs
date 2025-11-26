@@ -68,7 +68,7 @@ public class ExpressionHandler(
         new[] { "." }.Contains(token);
 
     
-    private void RemoveDuplicateToken(List<string> inputList, string input, Func<string, bool> tokenChecker)
+    private static void RemoveDuplicateToken(List<string> inputList, string input, Func<string, bool> tokenChecker)
     {
         int lastIndex = inputList.Count - 1;
         string token = inputList.Count == 0 ? "" : inputList[lastIndex];
@@ -83,7 +83,7 @@ public class ExpressionHandler(
     }
 
     
-    private bool ExpressionContainsComma(List<string> inputList)
+    private static bool ExpressionContainsComma(List<string> inputList)
     {
         bool stringContainsComma = false;
         
@@ -97,11 +97,11 @@ public class ExpressionHandler(
                 stringContainsComma = true;
                 break;
             }
-            if (tokenIsOperator)
-            {
-                stringContainsComma = false;
-                break;
-            }
+
+            if (!tokenIsOperator) continue;
+            
+            stringContainsComma = false;
+            break;
         }
 
         return stringContainsComma;
@@ -147,27 +147,25 @@ public class ExpressionHandler(
     }
     
     
-    public string? HandleAcButton()
+    public void HandleAcButton()
     {
         if (_mathExpression.Count == 0)
-        {
-            return "";
-        }
+            return;
         
         if (IsOperator(_mathExpression[^1]))
-            return UpdateDisplay();
+            UpdateDisplay();
         
         RemoveLastItem(_mathExpression);
         _currentNumberInput.Clear();
-        return UpdateDisplay();
+        UpdateDisplay();
     }
 
     
-    public string HandleBackspace()
+    public void HandleBackspace()
     {
         if (_mathExpression.Count < 1)
         {
-            return UpdateDisplay();
+            UpdateDisplay();
         }
         
         if (IsOperator(_mathExpression[^1]))
@@ -175,15 +173,14 @@ public class ExpressionHandler(
             RemoveLastItem(_mathExpression);
             
             // Received help from gpt to use Select instead of Join
-            // Initializes 
             _currentNumberInput = _mathExpression[^1].Select(ch => ch.ToString()).ToList();
-            return UpdateDisplay();
+            UpdateDisplay();
         }
 
         if (IsOperator(_mathExpression[^1]) || _currentNumberInput.Count <= 0)
         {
             RemoveLastItem(_mathExpression);
-            return UpdateDisplay();
+            UpdateDisplay();
         }
         
         RemoveLastItem(_currentNumberInput);
@@ -191,7 +188,7 @@ public class ExpressionHandler(
         if (!IsOperator(_mathExpression[^1]) && _currentNumberInput.Count == 0)
         {
             RemoveLastItem(_mathExpression);
-            return UpdateDisplay();
+            UpdateDisplay();
         }
         
         // Update expression array
@@ -200,7 +197,7 @@ public class ExpressionHandler(
         if (_mathExpression.Count >= 1 && !IsOperator(_mathExpression[^1]))
             _mathExpression[^1] = joinedNumber;
         
-        return UpdateDisplay();
+        UpdateDisplay();
     }
 
     
@@ -213,7 +210,7 @@ public class ExpressionHandler(
     }
 
     
-    public string HandleCalculatorInput(string input)
+    public void HandleCalculatorInput(string input)
     {
         if (_operatorClicked)
         {
@@ -224,11 +221,11 @@ public class ExpressionHandler(
         {
             AddToNumber(input);
         }
-        return UpdateDisplay();
+        UpdateDisplay();
     }
 
 
-    public string HandleSignToggle()
+    public void HandleSignToggle()
     {
         if (IsOperator(_mathExpression[^1]))
         {
@@ -243,11 +240,11 @@ public class ExpressionHandler(
             string replaceWith = _mathExpression[operatorIndex] == "+" ? "-" : "+";
             _mathExpression[operatorIndex] = replaceWith;
         }
-        return UpdateDisplay();
+        UpdateDisplay();
     }
     
     
-    public string OperateOnPreviousResult(string input)
+    public void OperateOnPreviousResult(string input)
     {
         string? copiedResult = _result;
         Clear();
@@ -255,18 +252,18 @@ public class ExpressionHandler(
         if (copiedResult != null) _mathExpression.Add(copiedResult);
         _mathExpression.Add(input);
         
-        return UpdateDisplay();
+        UpdateDisplay();
     }
     
     
-    public string HandleCommaButton(string input)
+    public void HandleCommaButton(string input)
     {
         if (ExpressionContainsComma(_currentNumberInput))
-            return UpdateDisplay();
+            UpdateDisplay();
         
         RemoveDuplicateToken(_currentNumberInput, input, IsComma);
         AddToNumber(input);
-        return UpdateDisplay();
+        UpdateDisplay();
     }
     
     

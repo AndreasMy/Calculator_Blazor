@@ -2,14 +2,14 @@ namespace Calculator.Services.ExpressionHandler;
 
 public interface IExpressionHandler
 {
-    string HandleCalculatorInput(string input);
-    string HandleBackspace();
+    void HandleCalculatorInput(string input);
+    void HandleBackspace();
     void HandleEvalButton();
-    string HandleCommaButton(string input);
+    void HandleCommaButton(string input);
     void Clear();
-    string OperateOnPreviousResult(string input);
-    string? HandleAcButton();
-    string HandleSignToggle();
+    void OperateOnPreviousResult(string input);
+    void HandleAcButton();
+    void HandleSignToggle();
     
     event Action? OnChange;
     
